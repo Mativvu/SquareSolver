@@ -1,0 +1,125 @@
+#include <stdio.h>
+#include <math.h>
+
+#ifdef DEBUG
+#define DEBUGPrintEquation(expr) printf("Identified equation: " #expr "\n")
+#define DEBUGMyAssert(expr)                            \
+if(!(expr))                                            \
+{                                                      \
+    printf("Assert fail line %d, expr: " #expr " file %s",   \
+    __LINE__, __FILE__);                               \
+    exit(1);                                           \
+}
+#else
+#define DEBUGPrintEquation(expr) ;
+#define DEBUGMyAssert(expr) ;
+#endif
+
+enum ExitCode
+{
+    ExitCodeOK,
+    ExitCodeINPUT_ERROR,
+    ExitCodeCOEFF_ERROR,
+    ExitCodeSOLVER_ERROR,
+    ExitCodeOUTPUT_ERROR,
+    ExitCodeASSERT_FAIL
+};
+
+enum NumOfRoots
+{
+    NumOfRootsZERO,
+    NumOfRootsONE,
+    NumOfRootsTWO,
+    NumOfRootsINF_SOLS,
+    NumOfRootsNAN,
+};
+
+const double EPS = 1e-9;
+
+struct EquationCoeffs {
+    double a, b, c;
+};
+
+
+struct EquationRoots {
+    NumOfRoots num_of_roots;
+    double x1, x2;
+};
+
+ExitCode SolveQuadEquation(EquationCoeffs *eq_ptr, EquationRoots *roots_ptr);
+bool IsValid(double coeff);
+bool IsZero(double coeff);
+
+ExitCode SolveQuadEquation(EquationCoeffs *eq_ptr, EquationRoots *roots_ptr)
+{
+    double a = eq_ptr->a;
+    double b = eq_ptr->b;
+    double c = eq_ptr->c;
+
+    DEBUGMyAssert(eq_ptr != NULL);
+    DEBUGMyAssert(roots_ptr != NULL);
+
+    if(!(IsValid(a) && IsValid(b) && IsValid(c)))
+    {
+        return ExitCodeCOEFF_ERROR;
+    }
+
+    if (IsZero(a))
+    {
+        if (IsZero(b))
+        {
+            DEBUGPrintEquation("c = 0");
+            roots_ptr->num_of_roots = (IsZero(c)) ? NumOfRootsINF_SOLS : NumOfRootsZERO;
+        }
+        else
+        {
+            DEBUGPrintEquation("bx+c = 0");
+            roots_ptr->x1 = (IsZero(c)) ? 0 : -(c/b);
+            roots_ptr->num_of_roots = NumOfRootsONE;
+        }
+    }
+    else
+    {
+        if (IsZero(b) && c < -EPS)
+        {
+            DEBUGPrintEquation("ax^2+c = 0");
+            roots_ptr->x1 = sqrt(c/a);
+            roots_ptr->x2 = -sqrt(c/a);
+            roots_ptr->num_of_roots = NumOfRootsTWO;
+        }
+        else
+        {
+            double D = b*b - 4*a*c;
+            double sqrt_D = sqrt(D);
+            if (IsZero(D))
+            {
+                DEBUGPrintEquation("ax^2+bx+c = 0, D=0");
+                roots_ptr->x1 = -b/(2*a);
+                roots_ptr->num_of_roots = NumOfRootsONE;
+            }
+            else if (D > EPS)
+            {
+                DEBUGPrintEquation("ax^2+bx+c = 0, D>0");
+                roots_ptr->x1 = (-b + sqrt_D)/(2*a);
+                roots_ptr->x2 = (-b - sqrt_D)/(2*a);
+                roots_ptr->num_of_roots = NumOfRootsTWO;
+            }
+            else
+            {
+                DEBUGPrintEquation("ax^2+bx+c = 0, D<0");
+                roots_ptr->num_of_roots = NumOfRootsZERO;
+            }
+        }
+    }
+    return ExitCodeOK;
+}
+
+bool IsZero(double coeff)
+{
+    return (fabs(coeff) < EPS);
+}
+
+bool IsValid(double coeff)
+{
+    return (isfinite(coeff) && !isnan(coeff));
+}
