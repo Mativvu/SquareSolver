@@ -5,7 +5,7 @@
 #include "SSDebug.h"
 #include "SSSolve.h"
 
-const double EPS = 1e-9;
+const double EPS = 1e-18;
 
 bool IsZero(double coeff)
 {
@@ -49,6 +49,7 @@ ExitCode SolveQuadEquation(EquationCoeffs *eq_ptr, EquationRoots *roots_ptr)
     {
         if (IsZero(b) && c < -EPS)
         {
+            double sqrt_ca = sqrt(c/a);
             DEBUGPrintEquation("ax^2+c = 0");
             roots_ptr->x1 = sqrt(c/a);
             roots_ptr->x2 = -sqrt(c/a);

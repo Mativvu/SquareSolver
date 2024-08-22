@@ -1,39 +1,9 @@
 #include <stdio.h>
 #include "SSErrorCodes.h"
 
-void FileDescribeError(FILE *fout_p, ExitCode status)
+bool IsError(ExitCode status)
 {
-    switch (status)
-    {
-        case ExitCodeINPUT_ERROR:
-        {
-            fprintf(fout_p, "Wrong input, try again \n");
-            break;
-        }
-        case ExitCodeCOEFF_ERROR:
-        {
-            fprintf(fout_p, "Coefficients are not valid, enter again \n");
-            break;
-        }
-        case ExitCodeSOLVER_ERROR:
-        {
-            fprintf(fout_p, "Number of roots is not valid \n");
-            break;
-        }
-        case ExitCodeOUTPUT_ERROR:
-        {
-            fprintf(fout_p, "Error, solution is NaN \n");
-            break;
-        }
-        case ExitCodeASSERT_FAIL:
-        {
-            fprintf(fout_p, "Program finished with error \n");
-        }
-        default:
-        {
-            fprintf(fout_p, "How did you get here? Everything is OK");
-        }
-    }
+    return (status != ExitCodeOK);
 }
 
 void DescribeError(ExitCode status)
@@ -60,9 +30,14 @@ void DescribeError(ExitCode status)
             printf("Error, solution is NaN \n");
             break;
         }
-        case ExitCodeASSERT_FAIL:
+        case ExitCodeEND_TEST:
         {
-            printf("Program finished with error \n");
+            printf("Testing finished \n");
+            break;
+        }
+        case ExitCodeMAXLEN_REACHED:
+        {
+            printf("Error, input line too long \n");
         }
         default:
         {
@@ -71,7 +46,3 @@ void DescribeError(ExitCode status)
     }
 }
 
-bool IsError(ExitCode status)
-{
-    return (status != ExitCodeOK);
-}

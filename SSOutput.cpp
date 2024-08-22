@@ -5,6 +5,7 @@
 #include "SSOutput.h"
 #include "SSSolve.h"
 
+
 ExitCode FilePrintSolutions(FILE *fout_p, EquationRoots *roots_ptr)
 {
     switch(roots_ptr->num_of_roots)
