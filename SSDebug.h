@@ -1,15 +1,17 @@
 #ifndef SSSDEBUG_H
 #define SSSDEBUG_H
 
-#define DEBUG
+//#define DEBUG
 #define UNITEST
 #define FILEMODE
 
-//#define COLOR_RED_Print(X) printf("%s %s %s",ANSI_COLOR_RED,X,ANSI_COLOR_RESET)
+extern const char* ANSI_COLOR_BLUE;
+extern const char* ANSI_COLOR_RESET;
 
 #ifdef DEBUG
-#define DEBUGPrintStr(string) printf("%s \n",string)
-#define DEBUGPrintEquation(expr) printf("Identified equation: " #expr "\n")
+#define DEBUGPrintStr(str) printf("%s%s%s \n", ANSI_COLOR_BLUE, str, ANSI_COLOR_RESET)
+#define DEBUGPrintEquation(expr) printf("%sIdentified equation: " #expr "%s\n", \
+                                        ANSI_COLOR_BLUE, ANSI_COLOR_RESET)
 #define DEBUGMyAssert(expr)                                  \
 if(!(expr))                                                  \
 {                                                            \
@@ -18,7 +20,7 @@ if(!(expr))                                                  \
     exit(1);                                                 \
 }
 #else
-#define DEBUGPrintStr(string) ;
+#define DEBUGPrintStr(str) ;
 #define DEBUGPrintEquation(expr) ;
 #define DEBUGMyAssert(expr) ;
 #endif

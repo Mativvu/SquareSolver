@@ -17,6 +17,10 @@
 // 1 2 3 g
 // f
 
+// argv argc
+// --interactive
+// --file
+// Сделай как-нибудь!
 int main()
 {
     FILE *fin_p = stdin;
