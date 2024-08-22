@@ -1,54 +1,21 @@
 #include <stdio.h>
 #include <math.h>
-
-#ifdef DEBUG
-#define DEBUGPrintEquation(expr) printf("Identified equation: " #expr "\n")
-#define DEBUGMyAssert(expr)                            \
-if(!(expr))                                            \
-{                                                      \
-    printf("Assert fail line %d, expr: " #expr " file %s",   \
-    __LINE__, __FILE__);                               \
-    exit(1);                                           \
-}
-#else
-#define DEBUGPrintEquation(expr) ;
-#define DEBUGMyAssert(expr) ;
-#endif
-
-enum ExitCode
-{
-    ExitCodeOK,
-    ExitCodeINPUT_ERROR,
-    ExitCodeCOEFF_ERROR,
-    ExitCodeSOLVER_ERROR,
-    ExitCodeOUTPUT_ERROR,
-    ExitCodeASSERT_FAIL
-};
-
-enum NumOfRoots
-{
-    NumOfRootsZERO,
-    NumOfRootsONE,
-    NumOfRootsTWO,
-    NumOfRootsINF_SOLS,
-    NumOfRootsNAN,
-};
+#include "SSErrorCodes.h"
+#include "SSStructures.h"
+#include "SSDebug.h"
+#include "SSSolve.h"
 
 const double EPS = 1e-9;
 
-struct EquationCoeffs {
-    double a, b, c;
-};
+bool IsZero(double coeff)
+{
+    return (fabs(coeff) < EPS);
+}
 
-
-struct EquationRoots {
-    NumOfRoots num_of_roots;
-    double x1, x2;
-};
-
-ExitCode SolveQuadEquation(EquationCoeffs *eq_ptr, EquationRoots *roots_ptr);
-bool IsValid(double coeff);
-bool IsZero(double coeff);
+bool IsValid(double coeff)
+{
+    return (isfinite(coeff) && !isnan(coeff));
+}
 
 ExitCode SolveQuadEquation(EquationCoeffs *eq_ptr, EquationRoots *roots_ptr)
 {
@@ -112,14 +79,4 @@ ExitCode SolveQuadEquation(EquationCoeffs *eq_ptr, EquationRoots *roots_ptr)
         }
     }
     return ExitCodeOK;
-}
-
-bool IsZero(double coeff)
-{
-    return (fabs(coeff) < EPS);
-}
-
-bool IsValid(double coeff)
-{
-    return (isfinite(coeff) && !isnan(coeff));
 }

@@ -1,38 +1,7 @@
 #include <stdio.h>
-
-enum ExitCode
-{
-    ExitCodeOK,
-    ExitCodeINPUT_ERROR,
-    ExitCodeCOEFF_ERROR,
-    ExitCodeSOLVER_ERROR,
-    ExitCodeOUTPUT_ERROR,
-    ExitCodeASSERT_FAIL
-};
-
-enum NumOfRoots
-{
-    NumOfRootsZERO,
-    NumOfRootsONE,
-    NumOfRootsTWO,
-    NumOfRootsINF_SOLS,
-    NumOfRootsNAN,
-};
-
-const double EPS = 1e-9;
-
-struct EquationCoeffs {
-    double a, b, c;
-};
-
-
-struct EquationRoots {
-    NumOfRoots num_of_roots;
-    double x1, x2;
-};
-
-ExitCode InputCoeffs(EquationCoeffs *eq_ptr);
-ExitCode FileInputCoeffs(FILE *fin_p, EquationCoeffs *eq_ptr);
+#include "SSErrorCodes.h"
+#include "SSStructures.h"
+#include "SSInput.h"
 
 ExitCode FileInputCoeffs(FILE *fin_p, EquationCoeffs *eq_ptr)
 {

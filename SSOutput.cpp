@@ -1,33 +1,9 @@
 #include <stdio.h>
 #include <math.h>
-
-enum ExitCode
-{
-    ExitCodeOK,
-    ExitCodeINPUT_ERROR,
-    ExitCodeCOEFF_ERROR,
-    ExitCodeSOLVER_ERROR,
-    ExitCodeOUTPUT_ERROR,
-    ExitCodeASSERT_FAIL
-};
-
-enum NumOfRoots
-{
-    NumOfRootsZERO,
-    NumOfRootsONE,
-    NumOfRootsTWO,
-    NumOfRootsINF_SOLS,
-    NumOfRootsNAN,
-};
-
-struct EquationRoots {
-    NumOfRoots num_of_roots;
-    double x1, x2;
-};
-
-ExitCode FilePrintSolutions(FILE *fout_p, EquationRoots *roots_ptr);
-ExitCode PrintSolutions(EquationRoots *roots_ptr);
-bool IsValid(double coeff);
+#include "SSErrorCodes.h"
+#include "SSStructures.h"
+#include "SSOutput.h"
+#include "SSSolve.h"
 
 ExitCode FilePrintSolutions(FILE *fout_p, EquationRoots *roots_ptr)
 {
@@ -107,9 +83,4 @@ ExitCode PrintSolutions(EquationRoots *roots_ptr)
         }
     }
     return ExitCodeOK;
-}
-
-bool IsValid(double coeff)
-{
-    return (isfinite(coeff) && !isnan(coeff));
 }
