@@ -1,17 +1,13 @@
 #ifndef SSSDEBUG_H
 #define SSSDEBUG_H
+#include "SSOutput.h"
 
 //#define DEBUG
-#define UNITEST
-#define FILEMODE
-
-extern const char* ANSI_COLOR_BLUE;
-extern const char* ANSI_COLOR_RESET;
 
 #ifdef DEBUG
-#define DEBUGPrintStr(str) printf("%s%s%s \n", ANSI_COLOR_BLUE, str, ANSI_COLOR_RESET)
+#define DEBUGPrintStr(str) printf("%s%s%s \n", BLUE, str, RESET)
 #define DEBUGPrintEquation(expr) printf("%sIdentified equation: " #expr "%s\n", \
-                                        ANSI_COLOR_BLUE, ANSI_COLOR_RESET)
+                                        BLUE, RESET)
 #define DEBUGMyAssert(expr)                                  \
 if(!(expr))                                                  \
 {                                                            \

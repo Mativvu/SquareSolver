@@ -19,12 +19,12 @@ bool IsValid(double coeff)
 
 ExitCode SolveQuadEquation(EquationCoeffs *eq_ptr, EquationRoots *roots_ptr)
 {
+    DEBUGMyAssert(eq_ptr != NULL);
+    DEBUGMyAssert(roots_ptr != NULL);
+
     double a = eq_ptr->a;
     double b = eq_ptr->b;
     double c = eq_ptr->c;
-
-    DEBUGMyAssert(eq_ptr != NULL);
-    DEBUGMyAssert(roots_ptr != NULL);
 
     if(!(IsValid(a) && IsValid(b) && IsValid(c)))
     {
@@ -36,13 +36,13 @@ ExitCode SolveQuadEquation(EquationCoeffs *eq_ptr, EquationRoots *roots_ptr)
         if (IsZero(b))
         {
             DEBUGPrintEquation("c = 0");
-            roots_ptr->num_of_roots = (IsZero(c)) ? NumOfRootsINF_SOLS : NumOfRootsZERO;
+            roots_ptr->num_of_roots = (IsZero(c)) ? INF_SOLS : 0;
         }
         else
         {
             DEBUGPrintEquation("bx+c = 0");
             roots_ptr->x1 = (IsZero(c)) ? 0 : -(c/b);
-            roots_ptr->num_of_roots = NumOfRootsONE;
+            roots_ptr->num_of_roots = 1;
         }
     }
     else
@@ -53,7 +53,7 @@ ExitCode SolveQuadEquation(EquationCoeffs *eq_ptr, EquationRoots *roots_ptr)
             DEBUGPrintEquation("ax^2+c = 0");
             roots_ptr->x1 = sqrt_ca;
             roots_ptr->x2 = -sqrt_ca;
-            roots_ptr->num_of_roots = NumOfRootsTWO;
+            roots_ptr->num_of_roots = 2;
         }
         else
         {
@@ -63,19 +63,19 @@ ExitCode SolveQuadEquation(EquationCoeffs *eq_ptr, EquationRoots *roots_ptr)
             {
                 DEBUGPrintEquation("ax^2+bx+c = 0, D=0");
                 roots_ptr->x1 = -b/(2*a);
-                roots_ptr->num_of_roots = NumOfRootsONE;
+                roots_ptr->num_of_roots = 1;
             }
             else if (D > EPS)
             {
                 DEBUGPrintEquation("ax^2+bx+c = 0, D>0");
                 roots_ptr->x1 = (-b + sqrt_D)/(2*a);
                 roots_ptr->x2 = (-b - sqrt_D)/(2*a);
-                roots_ptr->num_of_roots = NumOfRootsTWO;
+                roots_ptr->num_of_roots = 2;
             }
             else
             {
                 DEBUGPrintEquation("ax^2+bx+c = 0, D<0");
-                roots_ptr->num_of_roots = NumOfRootsZERO;
+                roots_ptr->num_of_roots = 0;
             }
         }
     }

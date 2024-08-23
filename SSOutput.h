@@ -1,12 +1,18 @@
 #ifndef SSOUTPUT_H
 #define SSOUTPUT_H
-
 #include <stdio.h>
 #include "SSStructures.h"
 #include "SSErrorCodes.h"
 
-void COLOR_RED_printf(const char *str);
-void COLOR_GREEN_printf(const char *str);
+extern const char* RED;
+extern const char* GREEN;
+extern const char* YELLOW;
+extern const char* BLUE;
+extern const char* MAGENTA;
+extern const char* CYAN;
+extern const char* RESET;
+
+void ColorPrintf(const char *color, const char *format, ...);
 ExitCode PrintSolutions(EquationRoots *roots_ptr);
 ExitCode FilePrintSolutions(FILE *fout_p, EquationRoots *roots_ptr);
 

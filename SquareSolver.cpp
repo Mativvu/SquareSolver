@@ -2,6 +2,7 @@
 #include <cstdio>
 #include <stdlib.h>
 #include <math.h>
+#include <string>
 
 #include "SSDebug.h"
 #include "SSStructures.h"
@@ -10,38 +11,56 @@
 #include "SSOutput.h"
 #include "SSUnitTest.h"
 
-// *const
-//FileDescribeError delete
 // Doxygen (docs)
 // README.md markdown browser
-// 1 2 3 g
-// f
 
-// argv argc
+
 // --interactive
 // --file
 // Сделай как-нибудь!
-int main()
+
+// Google Tests. python ... autotools GNU (GNU Compiler Collection)
+
+// README.md
+
+enum Mode
 {
+    ModeTest = 1,
+    ModeFile = 2
+};
+
+void ProcessMainArgs(int argc, char *argv[], int *mode);
+
+int main(int argc, char *argv[])
+{
+    ColorPrintf(MAGENTA, "You can start program with arguments: \n"
+           "-file to turn on file input and output\n"
+           "-test to start unit testing\n\n");
+
+    int mode = 0;
+    ProcessMainArgs(argc, argv, &mode);
+
     FILE *fin_p = stdin;
     FILE *fout_p = stdout;
-    #ifdef FILEMODE
-    fin_p = fopen("input", "r");
-    fout_p = fopen("output", "w");
-    #endif
+    if(mode & ModeFile)
+    {
+        fin_p = fopen("input", "r");
+        fout_p = fopen("output", "w");
+    }
 
     struct EquationCoeffs equation = {NAN, NAN, NAN};
-    struct EquationRoots roots = {NumOfRootsNAN, NAN, NAN};
+    struct EquationRoots roots = {NAN_ROOTS, NAN, NAN};
     ExitCode status = ExitCodeOK;
 
-    #ifdef UNITEST
-    status = RunUnitTests();
-    if (IsError(status))
+    if(mode & ModeTest)
     {
-        DescribeError(status);
+        status = RunUnitTests();
+        if (IsError(status))
+        {
+            DescribeError(status);
+        }
+        return 0;
     }
-    return 0;
-    #endif
 
     DEBUGPrintStr("Initialization completed, files opened successfully");
     status = FileInputCoeffs(fin_p, &equation);
@@ -65,6 +84,28 @@ int main()
         return status;
     }
     DEBUGPrintStr("Output finished successfully");
+}
+
+void ProcessMainArgs(int argc, char *argv[], int *mode)
+{
+    for(int i = 1; i < argc; i++)
+    {
+        if(strcmp(argv[i], "-file") == 0)
+        {
+            *mode |= ModeFile;
+            ColorPrintf(MAGENTA, "Found -test\n");
+        }
+        else if(strcmp(argv[i], "-test") == 0)
+        {
+            *mode |= ModeTest;
+            ColorPrintf(MAGENTA, "Found -test\n");
+        }
+        else if(argv[i][0] == '-')
+        {
+            ColorPrintf(MAGENTA, "Unknown command %s\n", argv[i]);
+        }
+    }
+    printf("\n");
 }
 
 
