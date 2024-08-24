@@ -1,0 +1,1 @@
+First solution: 2, second solution: -2

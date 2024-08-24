@@ -2,15 +2,18 @@
 #define SSERRORCODES_H
 #include <stdio.h>
 
-enum ExitCode
-{
+enum ExitCode {
     ExitCodeOK,
     ExitCodeINPUT_ERROR,
     ExitCodeCOEFF_ERROR,
     ExitCodeSOLVER_ERROR,
     ExitCodeOUTPUT_ERROR,
     ExitCodeEND_TEST,
-    ExitCodeMAXLEN_REACHED
+    ExitCodeMAXLEN_REACHED,
+    ExitCodeUNKNOWN_ARG,
+    ExitCodeCOMMAND_ERROR,
+    ExitCodeFILE_ERROR,
+    ExitCodeDUPLICATION_ERROR
 };
 
 bool IsError(ExitCode status);

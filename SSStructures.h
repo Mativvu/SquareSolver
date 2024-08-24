@@ -1,8 +1,13 @@
 #ifndef SSSTRUCTURES_H
 #define SSSTRUCTURES_H
 
-const int INF_SOLS = 3;
-const int NAN_ROOTS = -1;
+enum NumOfRoots {
+    NumOfRootsZERO,
+    NumOfRootsONE,
+    NumOfRootsTWO,
+    NumOfRootsINF_SOLS,
+    NumOfRootsNAN
+};
 
 struct EquationCoeffs {
     double a, b, c;

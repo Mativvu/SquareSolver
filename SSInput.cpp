@@ -2,17 +2,18 @@
 #include "SSErrorCodes.h"
 #include "SSStructures.h"
 #include "SSInput.h"
-
-const int MAXLEN = 100;
+#include "SSDebug.h"
 
 ExitCode FileInputCoeffs(FILE *fin_p, EquationCoeffs *eq_ptr)
 {
+    DEBUGMyAssert(fin_p != nullptr);
+    DEBUGMyAssert(eq_ptr != nullptr);
+
     char line[MAXLEN];
-    int num_of_inputted = 0;
 
     FileReadLine(fin_p, line);
-    num_of_inputted = sscanf(line, "%lg %lg %lg", &eq_ptr->a, &eq_ptr->b, &eq_ptr->c);
-    if (num_of_inputted != 3)
+    int res = sscanf(line, "%lg %lg %lg", &eq_ptr->a, &eq_ptr->b, &eq_ptr->c);
+    if (res != 3)
     {
         return ExitCodeINPUT_ERROR;
     }
@@ -21,30 +22,39 @@ ExitCode FileInputCoeffs(FILE *fin_p, EquationCoeffs *eq_ptr)
 
 ExitCode InputCoeffs(EquationCoeffs *eq_ptr)
 {
+    DEBUGMyAssert(eq_ptr != nullptr);
+
     printf("Enter coefficients of equation ax^2+bx+c=0 in format \"a b c\"\n");
-    if (scanf("%lg %lg %lg", &eq_ptr->a, &eq_ptr->b, &eq_ptr->c) != 3)
+
+    char line[MAXLEN];
+
+    FileReadLine(stdin, line);
+    int res = sscanf(line, "%lg %lg %lg", &eq_ptr->a, &eq_ptr->b, &eq_ptr->c);
+    if (res != 3)
     {
         return ExitCodeINPUT_ERROR;
     }
-    printf("Your input: %lg % lg %lg \n", eq_ptr->a, eq_ptr->b, eq_ptr->c);
+    printf("Your input: %lg %lg %lg \n", eq_ptr->a, eq_ptr->b, eq_ptr->c);
     return ExitCodeOK;
 }
+
 ExitCode FileReadLine(FILE *fin_p, char *str)
 {
-    int len = 0;
+    DEBUGMyAssert(fin_p != nullptr);
 
-    for(int ch = getc(fin_p);
-        ch != '\n' && ch != EOF;
-        ch = getc(fin_p))
+    int len = 0;
+    int ch = getc(fin_p);
+    while(ch != '\n' && ch != EOF)
     {
         if(len < MAXLEN)
         {
-            str[len++] = ch;
+            str[len++] = (char)ch;
         }
         else
         {
             return ExitCodeMAXLEN_REACHED;
         }
+        ch = getc(fin_p);
     }
     str[len] = '\0';
     return ExitCodeOK;

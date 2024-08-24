@@ -9,7 +9,6 @@
 #include "SSDebug.h"
 
 const double FLT_EPS = 1e8*FLT_EPSILON;
-const int MAXLEN = 100;
 
 static EquationCoeffs test_inputs[] = {
     {2, -5, 3},
@@ -23,29 +22,30 @@ static EquationCoeffs test_inputs[] = {
     {2, -0.2636, 0.00868562}
 };
 
+#define ANSWER(num, x1, x2) {(NumOfRoots)(num), x1, x2}
 static EquationRoots test_answers[] = {
-    {2, 1.5, 1},
-    {0, NAN, NAN},
-    {1, 3, NAN},
-    {2, 23.9564392373896, 1.043560762610399},
-    {2, 0, -64},
-    {2, -0.27714467697981027, -4.762855323020189},
-    {2, 9.328950638, -9.328950638},
-    {0, NAN, NAN},
-    {1, 0.0659, NAN}
+    ANSWER(2, 1.5, 1),
+    ANSWER(0, NAN, NAN),
+    ANSWER(1, 3, NAN),
+    ANSWER(2, 23.9564392373896, 1.043560762610399),
+    ANSWER(2, 0, -64),
+    ANSWER(2, -0.27714467697981027, -4.762855323020189),
+    ANSWER(2, 9.328950638, -9.328950638),
+    ANSWER(0, NAN, NAN),
+    ANSWER(1, 0.0659, NAN)
 };
-
-static size_t num_of_tests = sizeof(test_inputs)/sizeof(test_inputs[0]);
 
 ExitCode RunUnitTests()
 {
     ColorPrintf(GREEN, "Starting testing\n");
     ColorPrintf(GREEN, "--------------------------------------\n");
+
     int failed = 0;
+    int num_of_tests = (int) (sizeof(test_inputs)/sizeof(test_inputs[0]));
     for(int i = 0; i < num_of_tests; i++)
     {
         struct EquationCoeffs coeffs = test_inputs[i];
-        struct EquationRoots roots = {NAN_ROOTS, NAN, NAN};
+        struct EquationRoots roots = {NumOfRootsNAN, NAN, NAN};
         struct EquationRoots answers = test_answers[i];
 
         ExitCode status = SolveQuadEquation(&coeffs, &roots);
@@ -55,15 +55,15 @@ ExitCode RunUnitTests()
             return status;
         }
 
-        if(!IsRootsEqual(&roots, &answers))
+        if (!IsRootsEqual(&roots, &answers))
         {
             ColorPrintf(RED, "Test %d failed \n", i+1);
             ColorPrintf(RED, "Test coefficients: a = %lg, b = %lg, c = %lg \n",
-                   coeffs.a, coeffs.b, coeffs.c);
+                        coeffs.a, coeffs.b, coeffs.c);
             ColorPrintf(RED, "Recieved values: nRoots = %d, x1 = %lg, x2 = %lg \n",
-                   roots.num_of_roots, roots.x1, roots.x2);
+                        roots.num_of_roots, roots.x1, roots.x2);
             ColorPrintf(RED, "Expected values: nRoots = %d, x1 = %lg, x2 = %lg \n",
-                   answers.num_of_roots, answers.x1, answers.x2);
+                        answers.num_of_roots, answers.x1, answers.x2);
             failed++;
         }
         else
@@ -74,6 +74,7 @@ ExitCode RunUnitTests()
     ColorPrintf(GREEN, "--------------------------------------\n");
     ColorPrintf(GREEN, "Tests passed %d\n", num_of_tests-failed);
     ColorPrintf(RED, "Test failed %d\n", failed);
+
     double percent = ((failed == 0) ? 100 : (100*(num_of_tests-failed))/num_of_tests);
     ColorPrintf(YELLOW, "Percentage of passed: %lg\n", percent);
 
@@ -82,7 +83,7 @@ ExitCode RunUnitTests()
 
 bool IsFloatsEqual(double a, double b)
 {
-    if(isnan(a) && isnan(b))
+    if (isnan(a) && isnan(b))
     {
         return true;
     }
@@ -94,14 +95,19 @@ bool IsRootsEqual(EquationRoots *roots1_ptr, EquationRoots *roots2_ptr)
 {
     DEBUGMyAssert(roots1_ptr != nullptr);
     DEBUGMyAssert(roots2_ptr != nullptr);
+
     bool nRoots_equal = (roots1_ptr->num_of_roots == roots2_ptr->num_of_roots);
     bool x1_equal = IsFloatsEqual(roots1_ptr->x1, roots2_ptr->x1);
     bool x2_equal = IsFloatsEqual(roots1_ptr->x2, roots2_ptr->x2);
+
     return (nRoots_equal && x1_equal && x2_equal);
 }
 
 ExitCode FileInputTestAnswers(FILE *fin_answers_p, EquationRoots *answers_ptr)
 {
+    DEBUGMyAssert(fin_answers_p != nullptr);
+    DEBUGMyAssert(answers_ptr != nullptr);
+
     char line[MAXLEN] = {0};
 
     FileReadLine(fin_answers_p, line);
@@ -115,6 +121,8 @@ ExitCode FileInputTestAnswers(FILE *fin_answers_p, EquationRoots *answers_ptr)
 
 ExitCode FileInputNumOfTests(FILE *fin_coeffs_p, int *num_of_tests)
 {
+    DEBUGMyAssert(fin_coeffs_p != nullptr);
+
     char line[MAXLEN] = {0};
 
     FileReadLine(fin_coeffs_p, line);
@@ -128,8 +136,12 @@ ExitCode FileInputNumOfTests(FILE *fin_coeffs_p, int *num_of_tests)
 
 ExitCode FileRunUnitTests()
 {
-    FILE *fin_coeffs_p = fopen("UnitTestsInput", "r");
-    FILE *fin_answers_p = fopen("UnitTestsAnswers", "r");
+    FILE *fin_coeffs_p = fopen("UnitTestsInput.txt", "r");
+    FILE *fin_answers_p = fopen("UnitTestsAnswers.txt", "r");
+    if (fin_coeffs_p == nullptr || fin_answers_p == nullptr)
+    {
+        return ExitCodeFILE_ERROR;
+    }
 
     int num_of_tests = 0;
     ExitCode status = FileInputNumOfTests(fin_coeffs_p, &num_of_tests);
@@ -141,11 +153,11 @@ ExitCode FileRunUnitTests()
     ColorPrintf(GREEN, "Starting testing\n");
     ColorPrintf(GREEN, "--------------------------------------\n");
     int failed = 0;
-    for(int i = 0; i < num_of_tests; i++)
+    for (int i = 0; i < num_of_tests; i++)
     {
         struct EquationCoeffs coeffs = {NAN, NAN, NAN};
-        struct EquationRoots roots = {NAN_ROOTS, NAN, NAN};
-        struct EquationRoots answers = {NAN_ROOTS, NAN, NAN};
+        struct EquationRoots roots = {NumOfRootsNAN, NAN, NAN};
+        struct EquationRoots answers = {NumOfRootsNAN, NAN, NAN};
 
         status = FileInputCoeffs(fin_coeffs_p, &coeffs);
         if (IsError(status))
@@ -168,7 +180,7 @@ ExitCode FileRunUnitTests()
             return status;
         }
 
-        if(!IsRootsEqual(&roots, &answers))
+        if (!IsRootsEqual(&roots, &answers))
         {
             ColorPrintf(RED, "Test %d failed \n", i+1);
             ColorPrintf(RED, "Test coefficients: a = %lg, b = %lg, c = %lg \n",

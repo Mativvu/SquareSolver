@@ -36,13 +36,13 @@ ExitCode SolveQuadEquation(EquationCoeffs *eq_ptr, EquationRoots *roots_ptr)
         if (IsZero(b))
         {
             DEBUGPrintEquation("c = 0");
-            roots_ptr->num_of_roots = (IsZero(c)) ? INF_SOLS : 0;
+            roots_ptr->num_of_roots = (IsZero(c)) ? NumOfRootsINF_SOLS : NumOfRootsZERO;
         }
         else
         {
             DEBUGPrintEquation("bx+c = 0");
             roots_ptr->x1 = (IsZero(c)) ? 0 : -(c/b);
-            roots_ptr->num_of_roots = 1;
+            roots_ptr->num_of_roots = NumOfRootsONE;
         }
     }
     else
@@ -53,7 +53,7 @@ ExitCode SolveQuadEquation(EquationCoeffs *eq_ptr, EquationRoots *roots_ptr)
             DEBUGPrintEquation("ax^2+c = 0");
             roots_ptr->x1 = sqrt_ca;
             roots_ptr->x2 = -sqrt_ca;
-            roots_ptr->num_of_roots = 2;
+            roots_ptr->num_of_roots = NumOfRootsTWO;
         }
         else
         {
@@ -63,19 +63,19 @@ ExitCode SolveQuadEquation(EquationCoeffs *eq_ptr, EquationRoots *roots_ptr)
             {
                 DEBUGPrintEquation("ax^2+bx+c = 0, D=0");
                 roots_ptr->x1 = -b/(2*a);
-                roots_ptr->num_of_roots = 1;
+                roots_ptr->num_of_roots = NumOfRootsONE;
             }
             else if (D > EPS)
             {
                 DEBUGPrintEquation("ax^2+bx+c = 0, D>0");
                 roots_ptr->x1 = (-b + sqrt_D)/(2*a);
                 roots_ptr->x2 = (-b - sqrt_D)/(2*a);
-                roots_ptr->num_of_roots = 2;
+                roots_ptr->num_of_roots = NumOfRootsTWO;
             }
             else
             {
                 DEBUGPrintEquation("ax^2+bx+c = 0, D<0");
-                roots_ptr->num_of_roots = 0;
+                roots_ptr->num_of_roots = NumOfRootsZERO;
             }
         }
     }

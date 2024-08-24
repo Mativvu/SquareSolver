@@ -39,10 +39,36 @@ void DescribeError(ExitCode status)
         case ExitCodeMAXLEN_REACHED:
         {
             ColorPrintf(RED, "Error, input line too long \n");
+            break;
+        }
+        case ExitCodeUNKNOWN_ARG:
+        {
+            ColorPrintf(RED, "Error, found unknown command \n");
+            break;
+        }
+        case ExitCodeCOMMAND_ERROR:
+        {
+            ColorPrintf(RED, "Error, cannot use --file and --input or --output together \n");
+            break;
+        }
+        case ExitCodeFILE_ERROR:
+        {
+            ColorPrintf(RED, "Error, cannot find/open file \n");
+            break;
+        }
+        case ExitCodeDUPLICATION_ERROR:
+        {
+            ColorPrintf(RED, "Error, command duplication is forbidden\n");
+        }
+        case ExitCodeOK:
+        {
+            ColorPrintf(RED, "Function DescribeError called with OK status \n");
+            break;
         }
         default:
         {
-            ColorPrintf(RED, "How did you get here? Everything is OK \n");
+            ColorPrintf(RED, "Error, unknown status \n");
+            break;
         }
     }
 }

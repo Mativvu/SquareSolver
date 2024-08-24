@@ -13,7 +13,7 @@ if(!(expr))                                                  \
 {                                                            \
     printf("Assert fail line %d, expr: " #expr " file %s",   \
     __LINE__, __FILE__);                                     \
-    exit(1);                                                 \
+    abort();                                                 \
 }
 #else
 #define DEBUGPrintStr(str) ;
