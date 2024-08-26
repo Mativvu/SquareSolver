@@ -1,10 +1,10 @@
-# Solver of quadratic equations(overpowered version)
+# Solver of quadratic equations (overpowered version)
 
 
 ## Project describtion
 
 A C/C++ project for solving quadratic equations including other features such as 
-file input and output, unit testing, colored output and using command-line flags.
+file input and output, unit testing, colored output and processing command-line flags.
 
 
 ## Table of contents.
@@ -21,7 +21,7 @@ This project was made for MacOS, but you can still run it on any other OS if you
 bash file **compile.sh**, also you will lose a feature of shouting "ER TE"[^1] from your speakers, but this is 
 optional.
 
-[^1]: ...
+[^1]: "ER TE" or "РТ" is an abbreviation of MIPT faculty "FRECT" I`m studing at.
 
 This is the line you need to find in **compile.sh** and delete everything after the word *program*(all ... stuff).
 ```
@@ -29,27 +29,18 @@ g++ SSCatchError.cpp SquareSolver.cpp SSFlagsAndFiles.cpp SSInput.cpp SSSolve.cp
 ```
 
 ### How to run the program
-For MacOS: you will need Clang compiler versoin 15.0.0 or higher.
+Compilator: project was tested on Clang of version 15.0.0.
 
-How add the project to your github step by step:
-* Click green button "Code" and copy the HTTPS.
-* Open terminal.
-* Change the current working directory to the location where you want the cloned directory.
-* Type `git clone`, and then paste the URL you copied earlier. 
+Github URL for cloning: 
 ```
-git clone https://github.com/YOUR-USERNAME/YOUR-REPOSITORY
+https://github.com/Mativvu/SquareSolver
 ```
-* Press Enter to create your local clone.
 
-To download files in .zip click green button "Code" and click "Donwload ZIP".
-
-Then to run the program open your preferable code editor or just terminal and type this:
+To run the program open your terminal and type `cd folder` to get to the folder with project, then type
+this two lines to execute bash file and start the program:
 ```
-/PATH/complie.sh
-```
-Change *PATH* to the path to the folder with project. Then type this:
-```
-/PATH/program
+complie.sh
+program
 ```
 Congratulations, you ran the program!
 
