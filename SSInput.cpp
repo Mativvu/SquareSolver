@@ -1,4 +1,5 @@
 #include <stdio.h>
+
 #include "SSErrorCodes.h"
 #include "SSStructures.h"
 #include "SSInput.h"
@@ -9,10 +10,11 @@ ExitCode FileInputCoeffs(FILE *fin_p, EquationCoeffs *eq_ptr)
     DEBUGMyAssert(fin_p != nullptr);
     DEBUGMyAssert(eq_ptr != nullptr);
 
-    char line[MAXLEN];
+    char line[MAXLEN] = "";
+    char sym = '\0';
 
     FileReadLine(fin_p, line);
-    int res = sscanf(line, "%lg %lg %lg", &eq_ptr->a, &eq_ptr->b, &eq_ptr->c);
+    int res = sscanf(line, "%lg %lg %lg %c", &eq_ptr->a, &eq_ptr->b, &eq_ptr->c, &sym);
     if (res != 3)
     {
         return ExitCodeINPUT_ERROR;
@@ -26,10 +28,11 @@ ExitCode InputCoeffs(EquationCoeffs *eq_ptr)
 
     printf("Enter coefficients of equation ax^2+bx+c=0 in format \"a b c\"\n");
 
-    char line[MAXLEN];
+    char line[MAXLEN] = "";
+    char sym = '\0';
 
     FileReadLine(stdin, line);
-    int res = sscanf(line, "%lg %lg %lg", &eq_ptr->a, &eq_ptr->b, &eq_ptr->c);
+    int res = sscanf(line, "%lg %lg %lg %c", &eq_ptr->a, &eq_ptr->b, &eq_ptr->c, &sym);
     if (res != 3)
     {
         return ExitCodeINPUT_ERROR;
@@ -38,7 +41,7 @@ ExitCode InputCoeffs(EquationCoeffs *eq_ptr)
     return ExitCodeOK;
 }
 
-ExitCode FileReadLine(FILE *fin_p, char *str)
+ExitCode FileReadLine(FILE *fin_p, char str[])
 {
     DEBUGMyAssert(fin_p != nullptr);
 

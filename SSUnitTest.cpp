@@ -11,29 +11,34 @@
 const double FLT_EPS = 1e8*FLT_EPSILON;
 
 static EquationCoeffs test_inputs[] = {
-    {2, -5, 3},
-    {1.2, -7.8, 30},
-    {1, -6, 9},
-    {0.0002, -0.005, 0.005},
-    {2, 128, 0},
-    {2.45, 12.348, 3.234},
-    {1, 0, -87.02932},
-    {65.039, -5.3218, 3000},
-    {2, -0.2636, 0.00868562}
+//   a        b         c
+    {2,       -5,       3           },
+    {1.2,     -7.8,     30          },
+    {1,       -6,       9           },
+    {0.0002,  -0.005,   0.005       },
+    {2,       128,      0           },
+    {2.45,    12.348,   3.234       },
+    {1,       0,        -87.02932   },
+    {65.039,  -5.3218,  3000        },
+    {2,       -0.2636,  0.00868562  }
 };
 
-#define ANSWER(num, x1, x2) {(NumOfRoots)(num), x1, x2}
+#define ANSWER_LOCAL(num, x1, x2) {(NumOfRoots)(num), x1, x2}
+
 static EquationRoots test_answers[] = {
-    ANSWER(2, 1.5, 1),
-    ANSWER(0, NAN, NAN),
-    ANSWER(1, 3, NAN),
-    ANSWER(2, 23.9564392373896, 1.043560762610399),
-    ANSWER(2, 0, -64),
-    ANSWER(2, -0.27714467697981027, -4.762855323020189),
-    ANSWER(2, 9.328950638, -9.328950638),
-    ANSWER(0, NAN, NAN),
-    ANSWER(1, 0.0659, NAN)
+//            nRoots    x1                     x2
+    ANSWER_LOCAL(2,     1.5,                   1                   ),
+    ANSWER_LOCAL(0,     NAN,                   NAN                 ),
+    ANSWER_LOCAL(1,     3,                     NAN                 ),
+    ANSWER_LOCAL(2,     23.9564392373896,      1.043560762610399   ),
+    ANSWER_LOCAL(2,     0,                     -64                 ),
+    ANSWER_LOCAL(2,     -0.27714467697981027,  -4.762855323020189  ),
+    ANSWER_LOCAL(2,     9.328950638,           -9.328950638        ),
+    ANSWER_LOCAL(0,     NAN,                   NAN                 ),
+    ANSWER_LOCAL(1,     0.0659,                NAN                 )
 };
+
+#undef ANSWER_LOCAL
 
 ExitCode RunUnitTests()
 {
@@ -75,8 +80,15 @@ ExitCode RunUnitTests()
     ColorPrintf(GREEN, "Tests passed %d\n", num_of_tests-failed);
     ColorPrintf(RED, "Test failed %d\n", failed);
 
-    double percent = ((failed == 0) ? 100 : (100*(num_of_tests-failed))/num_of_tests);
-    ColorPrintf(YELLOW, "Percentage of passed: %lg\n", percent);
+    if (IsZero(num_of_tests))
+    {
+        ColorPrintf(RED, "No tests were run\n");
+    }
+    else
+    {
+        double percent = IsZero(failed) ? 100 : (100*(num_of_tests-failed))/num_of_tests;
+        ColorPrintf(YELLOW, "Percentage of passed: %lg\n", percent);
+    }
 
     return ExitCodeEND_TEST;
 }
@@ -88,7 +100,7 @@ bool IsFloatsEqual(double a, double b)
         return true;
     }
     a = fabs(a), b = fabs(b);
-    return (a >= (1-FLT_EPS)*b && a <= (1+FLT_EPS)*b);
+    return ((1-FLT_EPS)*b <= a && a <= (1+FLT_EPS)*b);
 }
 
 bool IsRootsEqual(EquationRoots *roots1_ptr, EquationRoots *roots2_ptr)
@@ -108,7 +120,7 @@ ExitCode FileInputTestAnswers(FILE *fin_answers_p, EquationRoots *answers_ptr)
     DEBUGMyAssert(fin_answers_p != nullptr);
     DEBUGMyAssert(answers_ptr != nullptr);
 
-    char line[MAXLEN] = {0};
+    char line[MAXLEN] = "";
 
     FileReadLine(fin_answers_p, line);
     int res = sscanf(line, "%d %lg %lg", &answers_ptr->num_of_roots, &answers_ptr->x1, &answers_ptr->x2);
@@ -119,11 +131,11 @@ ExitCode FileInputTestAnswers(FILE *fin_answers_p, EquationRoots *answers_ptr)
     return ExitCodeOK;
 }
 
-ExitCode FileInputNumOfTests(FILE *fin_coeffs_p, int *num_of_tests)
+ExitCode FileInputNumOfTests(FILE *fin_coeffs_p, int *num_of_tests_p)
 {
     DEBUGMyAssert(fin_coeffs_p != nullptr);
 
-    char line[MAXLEN] = {0};
+    char line[MAXLEN] = "";
 
     FileReadLine(fin_coeffs_p, line);
     int res = sscanf(line, "%d", num_of_tests);
@@ -136,7 +148,7 @@ ExitCode FileInputNumOfTests(FILE *fin_coeffs_p, int *num_of_tests)
 
 ExitCode FileRunUnitTests()
 {
-    FILE *fin_coeffs_p = fopen("UnitTestsInput.txt", "r");
+    FILE *fin_coeffs_p  = fopen("UnitTestsInput.txt",   "r");
     FILE *fin_answers_p = fopen("UnitTestsAnswers.txt", "r");
     if (fin_coeffs_p == nullptr || fin_answers_p == nullptr)
     {
@@ -152,11 +164,12 @@ ExitCode FileRunUnitTests()
 
     ColorPrintf(GREEN, "Starting testing\n");
     ColorPrintf(GREEN, "--------------------------------------\n");
+
     int failed = 0;
     for (int i = 0; i < num_of_tests; i++)
     {
         struct EquationCoeffs coeffs = {NAN, NAN, NAN};
-        struct EquationRoots roots = {NumOfRootsNAN, NAN, NAN};
+        struct EquationRoots roots   = {NumOfRootsNAN, NAN, NAN};
         struct EquationRoots answers = {NumOfRootsNAN, NAN, NAN};
 
         status = FileInputCoeffs(fin_coeffs_p, &coeffs);
@@ -184,11 +197,11 @@ ExitCode FileRunUnitTests()
         {
             ColorPrintf(RED, "Test %d failed \n", i+1);
             ColorPrintf(RED, "Test coefficients: a = %lg, b = %lg, c = %lg \n",
-                   coeffs.a, coeffs.b, coeffs.c);
+                        coeffs.a, coeffs.b, coeffs.c);
             ColorPrintf(RED, "Recieved values: nRoots = %d, x1 = %lg, x2 = %lg \n",
-                   roots.num_of_roots, roots.x1, roots.x2);
+                        roots.num_of_roots, roots.x1, roots.x2);
             ColorPrintf(RED, "Expected values: nRoots = %d, x1 = %lg, x2 = %lg \n",
-                   answers.num_of_roots, answers.x1, answers.x2);
+                        answers.num_of_roots, answers.x1, answers.x2);
             failed++;
         }
         else
@@ -199,8 +212,16 @@ ExitCode FileRunUnitTests()
     ColorPrintf(GREEN, "--------------------------------------\n");
     ColorPrintf(GREEN, "Tests passed %d\n", num_of_tests-failed);
     ColorPrintf(RED, "Test failed %d\n", failed);
-    double percent = ((failed == 0) ? 100 : (100*(num_of_tests-failed))/num_of_tests);
-    ColorPrintf(YELLOW, "Percentage of passed: %lg\n", percent);
+
+    if (IsZero(num_of_tests))
+    {
+        ColorPrintf(RED, "No tests were run\n");
+    }
+    else
+    {
+        double percent = IsZero(failed) ? 100 : (100*(num_of_tests-failed))/num_of_tests;
+        ColorPrintf(YELLOW, "Percentage of passed: %lg\n", percent);
+    }
 
     fclose(fin_coeffs_p);
     fclose(fin_answers_p);

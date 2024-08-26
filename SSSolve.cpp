@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <math.h>
+
 #include "SSErrorCodes.h"
 #include "SSStructures.h"
 #include "SSDebug.h"
@@ -7,14 +8,14 @@
 
 const double EPS = 1e-9;
 
-bool IsZero(double coeff)
+bool IsZero(double number)
 {
-    return (fabs(coeff) < EPS);
+    return (fabs(number) < EPS);
 }
 
-bool IsValid(double coeff)
+bool IsValid(double number)
 {
-    return (isfinite(coeff) && !isnan(coeff));
+    return (isfinite(number) && !isnan(number));
 }
 
 ExitCode SolveQuadEquation(EquationCoeffs *eq_ptr, EquationRoots *roots_ptr)
@@ -45,7 +46,7 @@ ExitCode SolveQuadEquation(EquationCoeffs *eq_ptr, EquationRoots *roots_ptr)
             roots_ptr->num_of_roots = NumOfRootsONE;
         }
     }
-    else
+    else // (a != 0)
     {
         if (IsZero(b) && c/a > EPS)
         {
