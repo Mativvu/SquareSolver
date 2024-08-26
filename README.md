@@ -18,18 +18,17 @@ file input and output, unit testing, colored output and processing command-line 
 
 ### Compatibily
 This project was made for MacOS, but you can still run it on any other OS if you delete compilation flags from
-bash file **compile.sh**, also you will lose a feature of shouting "ER TE"[^1] from your speakers, but this is 
-optional.
+bash file [compile.sh](compile.sh), also you will lose a feature of shouting "ER TE"[^1] from your speakers, but this is optional.
 
 [^1]: "ER TE" or "РТ" is an abbreviation of MIPT faculty "FRECT" I`m studing at.
 
-This is the line you need to find in **compile.sh** and delete everything after the word *program*(all ... stuff).
+This is the line you need to find in [compile.sh](compile.sh) and delete everything after the word *program*.
 ```
-g++ SSCatchError.cpp SquareSolver.cpp SSFlagsAndFiles.cpp SSInput.cpp SSSolve.cpp SSOutput.cpp SSUnitTest.cpp -o program ...
+g++ SSCatchError.cpp SquareSolver.cpp SSFlagsAndFiles.cpp SSInput.cpp SSSolve.cpp SSOutput.cpp SSUnitTest.cpp -o program <flags to delete>
 ```
 
 ### How to run the program
-Compilator: project was tested on Clang of version 15.0.0.
+Compilator: project was tested on Clang version 15.0.0.
 
 Github URL for cloning: 
 ```
@@ -37,20 +36,18 @@ https://github.com/Mativvu/SquareSolver
 ```
 
 To run the program open your terminal and type `cd folder` to get to the folder with project, then type
-this two lines to execute bash file and start the program:
+these two lines to execute bash file and start the program:
 ```
 complie.sh
 program
 ```
 If you see this, then congratulations, you ran the program!
+
 <img width="1156" alt="Снимок экрана 2024-08-26 в 18 33 59" src="https://github.com/user-attachments/assets/f93154ab-b4d6-42fd-a521-52644ecaa899">
 
 
 ## How to use the project
-If you start the program without any command-line flags you will see what kind of input it expects and what
-data it recieved seccessfully, after algorithm finishing, you will see the solutions to the equation 
-*ax^2+bx+c=0*.
-My project has some features besides just calcuating roots to the quadratic equation, you can access
+Project has some features besides just calcuating roots to the quadratic equation, you can access
 most of them using command-line arguments by typing them after the word *program*:
 ```
 /PATH/program --flag1 --flag2
@@ -77,14 +74,14 @@ wonderful Faculty of Radio Engineering and Computer Technology(FRECT), you proba
 how it looks like:
 <img width="1156" alt="Снимок экрана 2024-08-26 в 18 54 27" src="https://github.com/user-attachments/assets/d5ca6670-ec3c-4272-b31a-80de25dc27b4">
 
-* *Most of the text in program is colored using ANSI color codes, you can find them in [SSOutput.h](SSOutput.h) file, 
+_Most of the text in program is colored using ANSI color codes, you can find them in [SSOutput.h](SSOutput.h) file, 
 unfortunately colored output is not supported for files. Debug output is all blue, errors are printed in
 red and unit tests use red, green and yellow colors. Command-line arguments are printed in cyan and their 
-describtions in magenta.* *
+describtions in magenta._
 
 
 ## Project status
-The last version is 4.1, no more updates are planned.
+It will be get updates once in a while.
 
 
 ## Sources
@@ -93,6 +90,6 @@ first real programmming task. We were provided help from mentors, so this is a k
 
 
 ## Authors
-Matveychuk Egor, 1 year MIPT student
+Matveychuk Egor, first year MIPT student
 
 
