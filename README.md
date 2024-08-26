@@ -64,7 +64,7 @@ Example of output after unit testing:
   * **"--file"** or **"-f"** mode to use default "input.txt" and "output.txt" files. Combining this flag with flags
     *"--in"* or *"--out"* is forbidden, because they lead to other files being opened. Here is the output after typing
     this command: (Also shows what debug mode looks like)
-    <img width="1156" alt="Снимок экрана 2024-08-26 в 18 52 44" src="https://github.com/user-attachments/assets/447fa939-628e-499e-a416-c8a0ea935b76">
+<img width="1156" alt="Снимок экрана 2024-08-26 в 18 52 44" src="https://github.com/user-attachments/assets/447fa939-628e-499e-a416-c8a0ea935b76">
     Contents of the file "input.txt" were `1 0 -4` and "output.txt" `First solution: 2, second solution: -2`
 
   * **"--in"** or **"-i" plus "filename"** activates input from file that user inputted. 
