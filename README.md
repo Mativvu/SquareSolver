@@ -74,7 +74,7 @@ wonderful Faculty of Radio Engineering and Computer Technology(FRECT), you proba
 how it looks like:
 <img width="1156" alt="Снимок экрана 2024-08-26 в 18 54 27" src="https://github.com/user-attachments/assets/d5ca6670-ec3c-4272-b31a-80de25dc27b4">
 
-_Most of the text in program is colored using ANSI color codes, you can find them in [SSOutput.h](SSOutput.h) file, 
+> _Most of the text in program is colored using ANSI color codes, you can find them in [SSOutput.h](SSOutput.h) file, 
 unfortunately colored output is not supported for files. Debug output is all blue, errors are printed in
 red and unit tests use red, green and yellow colors. Command-line arguments are printed in cyan and their 
 describtions in magenta._
