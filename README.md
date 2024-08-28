@@ -59,19 +59,22 @@ activates assert() functions in program while debug mode is on.
   * **"--test"** or **"-t"** starts unit testing mode. Takes tests data from internal arrays and prints how many tests
 failed and passed in terminal. When combined with flag *"--file"* or *"-f"*, takes data from files "UnitTestsInput.txt" and "UnitTestsAnswers.txt". You can add more tests if you want, there are only 9 of them right now.
 Example of output after unit testing:
+
 <img width="1154" alt="Снимок экрана 2024-08-26 в 18 37 18" src="https://github.com/user-attachments/assets/51939405-1b1a-4a75-94e9-36d933733fc1">
 
   * **"--file"** or **"-f"** mode to use default "input.txt" and "output.txt" files. Combining this flag with flags
     *"--in"* or *"--out"* is forbidden, because they lead to other files being opened. Here is the output after typing
     this command: (Also shows what debug mode looks like)
+    
 <img width="1156" alt="Снимок экрана 2024-08-26 в 18 52 44" src="https://github.com/user-attachments/assets/447fa939-628e-499e-a416-c8a0ea935b76">
-    Contents of the file "input.txt" were `1 0 -4` and "output.txt" `First solution: 2, second solution: -2`
+
+Contents of the file "input.txt" were: `1 0 -4` and "output.txt": `First solution: 2, second solution: -2`
 
   * **"--in"** or **"-i" plus "filename"** activates input from file that user inputted. 
   * **"--out"** or **"-o" plus "filename"** activates output to file that user inputted. 
   * **"--RT"** or **"-r"** prints "РТ" sign and shouts "ER TE" from speakers. This flag was made in honor to our
-wonderful Faculty of Radio Engineering and Computer Technology(FRECT), you probably wouldn`t understand. Thats
-how it looks like:
+wonderful Faculty of Radio Engineering and Computer Technology(FRECT), you probably wouldn`t understand. Thats how it looks like:
+
 <img width="1156" alt="Снимок экрана 2024-08-26 в 18 54 27" src="https://github.com/user-attachments/assets/d5ca6670-ec3c-4272-b31a-80de25dc27b4">
 
 > _Most of the text in program is colored using ANSI color codes, you can find them in [SSOutput.h](SSOutput.h) file, 
