@@ -93,6 +93,6 @@ first real programmming task. We were provided help from mentors, so this is a k
 
 
 ## Authors
-Matveychuk Egor, first year MIPT student
+Matveychuk Egor, (almost) first year MIPT student
 
 
