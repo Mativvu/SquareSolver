@@ -1,29 +1,17 @@
-#include <stdio.h>
-#include <cstdio>
-#include <stdlib.h>
 #include <math.h>
-#include <string>
+#include <stdio.h>
 
-#include "SSDebug.h"
-#include "SSStructures.h"
-#include "SSInput.h"
-#include "SSSolve.h"
-#include "SSOutput.h"
-#include "SSUnitTest.h"
-#include "SSFlagsAndFiles.h"
-
-// TODO:
-// Doxygen (docs)
-// README.md markdown browser
-// Google Tests. python ... autotools GNU (GNU Compiler Collection)
-// README.md
-// --- - - - --Make Makefile!
-// {} {0} {'\0'} "" - initialization
+#include "Debug.h"
+#include "Structures.h"
+#include "Input.h"
+#include "Solve.h"
+#include "Output.h"
+#include "UnitTest.h"
+#include "FlagsAndFiles.h"
 
 int main(const int argc, const char *argv[])
 {
     int mode_field = 0;
-    DEBUGMyAssert(mode_field != 0);
 
     const char *fin_name = nullptr;
     const char *fout_name = nullptr;
@@ -34,10 +22,12 @@ int main(const int argc, const char *argv[])
         return status;
     }
 
-    IsModeSet(mode_field, ModeRT) ? PrintRT() : ColorPrintf(RED, "No RT((((\n");
-
-    IsModeSet(mode_field, ModeHelp) ? PrintCommands()
-                                    : ColorPrintf(MAGENTA, "Use --help to see commands\n");
+    status = PerformPrintingCommands(mode_field);
+    if (IsError(status))
+    {
+        DescribeError(status);
+        return status;
+    }
 
     FILE *fin_p = nullptr;
     FILE *fout_p = nullptr;
@@ -63,8 +53,9 @@ int main(const int argc, const char *argv[])
     struct EquationCoeffs equation = {NAN, NAN, NAN};
     struct EquationRoots roots = {NumOfRootsNAN, NAN, NAN};
 
-    status = (IsModeSet(mode_field, (ModeFile | ModeInput))) ? FileInputCoeffs(fin_p, &equation)
-                                                             : InputCoeffs(&equation);
+    status = (IsAnyModesSet(mode_field, (ModeFile | ModeInput)))
+            ? FileInputCoeffs(fin_p, &equation)
+            : InputCoeffs(&equation);
     if (IsError(status))
     {
         DescribeError(status);
@@ -80,8 +71,9 @@ int main(const int argc, const char *argv[])
     }
     DEBUGPrintStr("Solving function finished");
 
-    status = ((IsModeSet(mode_field, (ModeFile | ModeOutput))) ? FilePrintSolutions(fout_p, &roots)
-                                                               : PrintSolutions(&roots));
+    status = ((IsAnyModesSet(mode_field, (ModeFile | ModeOutput)))
+             ? FilePrintSolutions(fout_p, &roots)
+             : PrintSolutions(&roots));
     if (IsError(status))
     {
         DescribeError(status);
