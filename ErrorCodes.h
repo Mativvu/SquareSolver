@@ -8,6 +8,21 @@
 #ifndef ERRORCODES_H
 #define ERRORCODES_H
 
+#define checkStatus(status) \
+if (IsError(status))        \
+{                           \
+    DescribeError(status);  \
+    return status;          \
+};
+/** \def checkStatus(status)
+* \brief Function to describe error and return code of the error, if status is bad.
+* Basically, just to make code shorter.
+*
+* \details Function for processing returned status from functions.
+*
+* @param status Returned value from functions, ::ExitCode type
+*/
+
 enum ExitCode {
     ExitCodeOK                = 0, /**< Function finished without errors. */
     ExitCodeINPUT_ERROR       = 1, /**< The input was wrong. */
